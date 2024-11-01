@@ -1,6 +1,5 @@
 const btn1 = document.querySelector("#crud-modal");
 let isclick =true;
-
 let btn = function(){
     if(isclick == 1){
         btn1.style.display="block";
@@ -11,7 +10,7 @@ let btn = function(){
     }
    
 }
-
+let crud = document.getElementById('crud-modal');
  let title = document.getElementById('title');
 let statu = document.getElementById('statu');
 let Priority = document.getElementById('Priority');
@@ -39,7 +38,7 @@ function render() {
         const container = getcontainer(task.statu);
         if (container) {
             container.innerHTML += `
-               <div id="pro" class="border-2  border ${create(Priority)}  border-l-8 border..." style="height: 130px; width: 330px; margin-top:60px ; margin-left: 150px;">
+               <div id="pro" class="border-2 todoo ${create(Priority)}  border-l-8 border..." style="height: 130px; width: 330px; margin-top:60px ; margin-left: 150px;">
            
         <h2 style="margin-left: 30px; font-family: 'Courier New', Courier, monospace;   font-size: 600;">${task.title}</h2>
                                 <p style="margin-left: 20px;">${task.statu}</p>
@@ -50,8 +49,8 @@ function render() {
    
            <div class="flex" style="margin-top: 60px; margin-left: 140px;">
    
-               <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Update</button>
-               <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+               <button type="button"   onclick="update(${index})" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Update</button>
+               <button type="button" onclick="deletee(${index})" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
    
    
            </div>
@@ -91,13 +90,49 @@ function create( Priority) {
     let con = document.getElementById("pro");
     if(Priority==="P1"){
            
-        document.getElementById("pro").classList.add("border-b-4", "border-red-500","mt-[80px]","w-[330px]","ml-[150px]")
+        document.getElementById("pro").classList.add("todoo")
     }else if(Priority==="P2"){
-        document.getElementById("pro").classList.add("border-b-4 border-red-500","margin-top: 80px;","width: 330px;"," margin-top:60px ;"," margin-left: 150px;")
-
+        document.getElementById("pro").classList.add("todoo1")
     }else if (Priority==="P3"){
-        document.getElementById("pro").classList.add("border-b-4 border-red-500","margin-top: 80px;","width: 330px;"," margin-top:60px ;"," margin-left: 150px;")
+        document.getElementById("pro").classList.add("todoo2")
 
     }
 
     }
+
+    function cleardata(){
+        task.title= '';
+        task.description= '';
+        task.statu='';
+        task.Priority='';
+
+}
+
+
+function deletee(index) {
+    data.splice(index, 1);
+    localStorage.setItem('stockage', JSON.stringify(data));
+    render();
+}
+
+
+
+function update(index) {
+    const task = data[index];
+    if (task) {
+        document.getElementById('title').value = task.title;
+        document.getElementById('statu').value = task.statu;
+       //document.getElementById('priority').value = task.Priority;
+        document.getElementById('description').value = task.description;
+    }
+    document.getElementById('crud-modal').style.display = 'flex';
+}
+
+function save() {
+    document.getElementById('crud-modal').style.display = 'none';
+   
+}
+
+
+
+    
