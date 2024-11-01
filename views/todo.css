@@ -1,12 +1,3 @@
-.red{
-    border: 2px solid red;
-    border-left-width: 8px;
-}
-.blue{
-    border: 2px solid blue;
-    border-left-width: 8px;
-}
-.green{
-    border: 2px solid green;
-    border-left-width: 8px;
+.border{
+    @apply border-b-4 border-red-500 mt-[80px] w-[330px] ml-[150px];
 }
