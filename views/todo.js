@@ -8,131 +8,165 @@ let btn = function(){
         btn1.style.display="none";
         isclick=1;
     }
-   
-}
-let crud = document.getElementById('crud-modal');
- let title = document.getElementById('title');
-let statu = document.getElementById('statu');
-let Priority = document.getElementById('Priority');
-let description = document.getElementById('description');
-let submit = document.getElementById('submit');
- let todo1 = document.getElementById('todo1');
-let doing1 = document.getElementById('doing1');
-let done1 = document.getElementById('doing1');
-
-// create task 
-   
-let data;
-if (localStorage.stockage != null) {
-    data = JSON.parse(localStorage.stockage);
-} else {
-    data = [];
 }
 
-function render() {
-    todo1.innerHTML = '';
-    doing1.innerHTML = '';
-    done1.innerHTML = '';
+const crudModal = document.getElementById('crud-modal');
+const titleInput = document.getElementById('title');
+const statusInput = document.getElementById('statu');
+const priorityInput = document.getElementById('Priority');
+const descriptionInput = document.getElementById('description');
+const submitButton = document.getElementById('submit');
+const todoList = document.getElementById('todo1');
+const doingList = document.getElementById('doing1');
+const doneList = document.getElementById('done1');
 
-    data.forEach((task, index) => {
-        const container = getcontainer(task.statu);
+let data = localStorage.stockage ? JSON.parse(localStorage.stockage) : [];
+
+// Update task statistics
+function statistic() {
+    const todoCount = data.filter(task => task.statu === 'todo').length;
+    const doingCount = data.filter(task => task.statu === 'doing').length;
+    const doneCount = data.filter(task => task.statu === 'done').length;
+
+    document.getElementById('todo-count').textContent = `todo: ${todoCount}`;
+    document.getElementById('doing-count').textContent = `doing: ${doingCount}`;
+    document.getElementById('done-count').textContent = `done: ${doneCount}`;
+}
+
+// Search tasks
+document.getElementById('search-bar').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    const filteredTasks = data.filter(task => task.title.toLowerCase().includes(query));
+    render(filteredTasks);
+});
+
+// Render tasks
+function render(tasks = data) {
+    todoList.innerHTML = '';
+    doingList.innerHTML = '';
+    doneList.innerHTML = '';
+
+    tasks.forEach((task, index) => {
+        const container = getContainer(task.statu);
         if (container) {
             container.innerHTML += `
-               <div id="pro" class="border-2 todoo ${create(Priority)}  border-l-8 border..." style="height: 130px; width: 330px; margin-top:60px ; margin-left: 150px;">
-           
-        <h2 style="margin-left: 30px; font-family: 'Courier New', Courier, monospace;   font-size: 600;">${task.title}</h2>
-                                <p style="margin-left: 20px;">${task.statu}</p>
-                               <p style="margin-left: 20px;">${task.Priority}</p>
-   
-                                <p style="margin-left: 20px;">${task.description}</p>
-   
-   
-           <div class="flex" style="margin-top: 60px; margin-left: 140px;">
-   
-               <button type="button"   onclick="update(${index})" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Update</button>
-               <button type="button" onclick="deletee(${index})" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-   
-   
-           </div>
-           </div>
-            `
+                <div class="border-2 todoo1 ${createPriorityClass(task.Priority)} border-l-8" style="height: 130px; width: 330px; margin-top: 60px; margin-left: 150px;">
+                    <h2 style="margin-left: 30px; font-family: 'Courier New', Courier, monospace; font-size: 600;">${task.title}</h2>
+                    <p style="margin-left: 20px;">Statut: ${task.statu}</p>
+                    <p style="margin-left: 20px;">Priorité: ${task.Priority}</p>
+                    <p style="margin-left: 20px;">Description: ${task.description}</p>
+                    <p  id="date-filter"   style="margin-left: 20px;">Date d'échéance: ${task.dueDate}</p>
+                    <div class="flex" style="margin-top: 20px; margin-left: 140px;">
+                        <button type="button" onclick="openUpdate(${index})" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Update</button>
+                        <button type="button" onclick="deleteTask(${index})" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Delete</button>
+                    </div>
+                </div>
+            `;
         }
     });
+
+    statistic();
+    render(filteredTasks); 
+    filterByDate(selectedDate);
 }
 
-submit.onclick = function() {
-    let newtask = {
-        title: title.value,
-        statu: statu.value,
-        Priority: Priority.value,
-        description: description.value,
+// Submit new task
+submitButton.onclick = function() {
+    const newTask = {
+        title: titleInput.value,
+        statu: statusInput.value,
+        Priority: priorityInput.value,
+        description: descriptionInput.value,
+        dueDate: dueDate.value
+
     };
-    data.push(newtask);
+    
+    data.push(newTask);
     localStorage.setItem('stockage', JSON.stringify(data));
     render();
+    clearInputs();
+    // updateStatistics();
 };
 
-function getcontainer(statu) {
-    switch (statu) {
+// Get container based on status
+function getContainer(status) {
+    switch (status) {
         case 'todo':
-            return document.getElementById('todo1');
+            return todoList;
         case 'doing':
-            return document.getElementById('doing1');
+            return doingList;
         case 'done':
-            return document.getElementById('done1');
+            return doneList;
         default:
             return null;
     }
 }
 
-function create( Priority) { 
-    const div = document.createElement('div');
-    let con = document.getElementById("pro");
-    if(Priority==="P1"){
-           
-        document.getElementById("pro").classList.add("todoo")
-    }else if(Priority==="P2"){
-        document.getElementById("pro").classList.add("todoo1")
-    }else if (Priority==="P3"){
-        document.getElementById("pro").classList.add("todoo2")
-
+// Create priority class for styling
+function createPriorityClass(priority) {
+    switch (priority) {
+        case 'P1':
+            return 'todoo';
+        case 'P2':
+            return 'todoo1';
+        case 'P3':
+            return 'todoo2';
+        default:
+            return '';
     }
+}
 
-    }
-
-    function cleardata(){
-        task.title= '';
-        task.description= '';
-        task.statu='';
-        task.Priority='';
+// Clear input fields
+function clearInputs() {
+    titleInput.value = '';
+    statusInput.value = '';
+    priorityInput.value = '';
+    descriptionInput.value = '';
 
 }
 
-
-function deletee(index) {
+// Delete a task
+function deleteTask(index) {
     data.splice(index, 1);
     localStorage.setItem('stockage', JSON.stringify(data));
     render();
+    statistic();
 }
 
-
-
-function update(index) {
+// Open update modal
+function openUpdate(index) {
     const task = data[index];
     if (task) {
-        document.getElementById('title').value = task.title;
-        document.getElementById('statu').value = task.statu;
-       //document.getElementById('priority').value = task.Priority;
-        document.getElementById('description').value = task.description;
+        titleInput.value = task.title;
+        statusInput.value = task.statu;
+        priorityInput.value = task.Priority;
+        descriptionInput.value = task.description;
+        crudModal.style.display = 'flex';
     }
-    document.getElementById('crud-modal').style.display = 'flex';
+    statistic();
 }
 
+// Save and close modal
 function save() {
-    document.getElementById('crud-modal').style.display = 'none';
-   
+    crudModal.style.display = 'none';
 }
 
+// Initial render
+render();
 
+// Fonction de filtrage par date
+function filterByDate(date) {
+    const filteredTasks = data.filter(task => task.dueDate === date);
+    render(filteredTasks); // Afficher les tâches filtrées
+}
 
-    
+// Écouteur d'événements pour le champ de date
+document.getElementById('date-filter').addEventListener('input', function() {
+    const selectedDate = this.value; // Récupérer la date sélectionnée
+    if (selectedDate) {
+        filterByDate(selectedDate); // Appeler la fonction de filtrage par date
+    } else {
+        render(); // Si aucune date n'est sélectionnée, afficher toutes les tâches
+    }
+});
+
