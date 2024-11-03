@@ -24,7 +24,7 @@
             </svg>
             
         </div >
-        <input type="search" id="search-bar" class="  block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search " required style="padding-inline: 120px;" />
+        <input type="search" id="bar" class="  block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search " required style="padding-inline: 120px;" />
         <button type="button" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
 </form>
@@ -107,18 +107,18 @@
   
   
   
-  <div class="container flex  "  style=" margin-left: -100px; width: 100px;" >
+  <div class=" grid1 container flex  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10"  style=" margin-left: -100px; width: 100px;" >
   
-   <div class="flex-col  " style="margin-top: 50px;" >
-    <div   class="box  border-b-4 border-red-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 ><p id="todo-count">To Do: 0</p></h2></div>
+   <div class="flex-col grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10  " style="margin-top: 50px;" >
+    <div   class="box  border-b-4 border-red-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 ><p id="todocount">To Do: 0</p></h2></div>
  <div id="todo1" >
        
 
            
  </div>
    </div>
-   <div class="flex-col"  style="margin-top: 50px;">
-    <div    class=" box  border-b-4 border-blue-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 ><p id="doing-count">Doing: 0</p>  </h2></div>
+   <div class="flex-col grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10"  style="margin-top: 50px;">
+    <div    class=" box  border-b-4 border-blue-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 ><p id="doingcount">Doing: 0</p>  </h2></div>
        
     <div id="doing1" >
        
@@ -127,8 +127,8 @@
 
  
 
-   <div class="flex-col " style="margin-top: 50px;">
-    <div     class=" box  border-b-4 border-green-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 > <p id="done-count">Done: 0</p></h2></div>
+   <div class="flex-col grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10" style="margin-top: 50px;">
+    <div     class=" box  border-b-4 border-green-500" style="margin-top: 80px; width: 330px; margin-left: 150px; "> <h2 > <p id="donecount">Done: 0</p></h2></div>
     
     <div id="done1" >
      
@@ -136,7 +136,7 @@
    </div>
    
 </div>  
-<span></span>
+
     <script src="todo.js"></script>
 
 

@@ -22,25 +22,25 @@ const doneList = document.getElementById('done1');
 
 let data = localStorage.stockage ? JSON.parse(localStorage.stockage) : [];
 
-// Update task statistics
-function statistic() {
-    const todoCount = data.filter(task => task.statu === 'todo').length;
-    const doingCount = data.filter(task => task.statu === 'doing').length;
-    const doneCount = data.filter(task => task.statu === 'done').length;
 
-    document.getElementById('todo-count').textContent = `todo: ${todoCount}`;
-    document.getElementById('doing-count').textContent = `doing: ${doingCount}`;
-    document.getElementById('done-count').textContent = `done: ${doneCount}`;
+
+function statistic() {
+    const todocount = data.filter(task => task.statu === 'todo').length;
+    const doingcount = data.filter(task => task.statu === 'doing').length;
+    const donecount = data.filter(task => task.statu === 'done').length;
+
+    document.getElementById('todocount').textContent = `todo: ${todocount}`;
+    document.getElementById('doingcount').textContent = `doing: ${doingcount}`;
+    document.getElementById('donecount').textContent = `done: ${donecount}`;
 }
 
-// Search tasks
-document.getElementById('search-bar').addEventListener('input', function() {
+
+document.getElementById('bar').addEventListener('input', function() {
     const query = this.value.toLowerCase();
-    const filteredTasks = data.filter(task => task.title.toLowerCase().includes(query));
-    render(filteredTasks);
+    const filtersearche = data.filter(task => task.title.toLowerCase().includes(query));
+    render(filtersearche);
 });
 
-// Render tasks
 function render(tasks = data) {
     todoList.innerHTML = '';
     doingList.innerHTML = '';
@@ -51,7 +51,7 @@ function render(tasks = data) {
         if (container) {
             container.innerHTML += `
                 <div class="border-2 todoo1 ${createPriorityClass(task.Priority)} border-l-8" style="height: 130px; width: 330px; margin-top: 60px; margin-left: 150px;">
-                    <h2 style="margin-left: 30px; font-family: 'Courier New', Courier, monospace; font-size: 600;">${task.title}</h2>
+                    <h2 style="margin-left: 30px; font-family: 'Courier New', Courier, monospace; font-size: 700;font-weight:600;">Title:${task.title}</h2>
                     <p style="margin-left: 20px;">Statut: ${task.statu}</p>
                     <p style="margin-left: 20px;">Priorité: ${task.Priority}</p>
                     <p style="margin-left: 20px;">Description: ${task.description}</p>
@@ -66,11 +66,11 @@ function render(tasks = data) {
     });
 
     statistic();
-    render(filteredTasks); 
-    filterByDate(selectedDate);
+    render(filtersearche); 
+    filterdate(selectedate);
+    render(datefilter); 
 }
 
-// Submit new task
 submitButton.onclick = function() {
     const newTask = {
         title: titleInput.value,
@@ -84,11 +84,9 @@ submitButton.onclick = function() {
     data.push(newTask);
     localStorage.setItem('stockage', JSON.stringify(data));
     render();
-    clearInputs();
-    // updateStatistics();
+    clear();
 };
 
-// Get container based on status
 function getContainer(status) {
     switch (status) {
         case 'todo':
@@ -102,7 +100,6 @@ function getContainer(status) {
     }
 }
 
-// Create priority class for styling
 function createPriorityClass(priority) {
     switch (priority) {
         case 'P1':
@@ -116,8 +113,7 @@ function createPriorityClass(priority) {
     }
 }
 
-// Clear input fields
-function clearInputs() {
+function clear() {
     titleInput.value = '';
     statusInput.value = '';
     priorityInput.value = '';
@@ -125,7 +121,6 @@ function clearInputs() {
 
 }
 
-// Delete a task
 function deleteTask(index) {
     data.splice(index, 1);
     localStorage.setItem('stockage', JSON.stringify(data));
@@ -133,7 +128,6 @@ function deleteTask(index) {
     statistic();
 }
 
-// Open update modal
 function openUpdate(index) {
     const task = data[index];
     if (task) {
@@ -146,27 +140,23 @@ function openUpdate(index) {
     statistic();
 }
 
-// Save and close modal
 function save() {
     crudModal.style.display = 'none';
 }
 
-// Initial render
 render();
 
-// Fonction de filtrage par date
-function filterByDate(date) {
-    const filteredTasks = data.filter(task => task.dueDate === date);
-    render(filteredTasks); // Afficher les tâches filtrées
+function filterdate(date) {
+    const datefilter = data.filter(task => task.dueDate === date);
+    render(datefilter); 
 }
 
-// Écouteur d'événements pour le champ de date
 document.getElementById('date-filter').addEventListener('input', function() {
-    const selectedDate = this.value; // Récupérer la date sélectionnée
-    if (selectedDate) {
-        filterByDate(selectedDate); // Appeler la fonction de filtrage par date
+    const selectedate = this.value; 
+    if (selectedate) {
+        filterdate(selectedate); 
     } else {
-        render(); // Si aucune date n'est sélectionnée, afficher toutes les tâches
+        render(); 
     }
 });
 
